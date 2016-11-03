@@ -1,0 +1,1 @@
+watchify lib/fingers.js -d -o dist/script.js -v
