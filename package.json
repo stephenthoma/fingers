@@ -4,7 +4,8 @@
   "description": "",
   "main": "fingers.js",
   "dependencies": {
-    "murmur": "0.0.2"
+    "murmur": "0.0.2",
+    "swfobject": "^2.2.1"
   },
   "devDependencies": {},
   "scripts": {
