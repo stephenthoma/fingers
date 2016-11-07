@@ -1,3 +1,5 @@
+// Largely pulled from https://github.com/nfriedly/Javascript-Flash-Cookies
+// and https://github.com/samyk/evercookie/blob/master/assets/evercookie.swf
 package {
 
 import flash.display.Sprite;
