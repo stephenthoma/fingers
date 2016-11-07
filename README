@@ -1,1 +1,5 @@
-watchify lib/fingers.js -d -o dist/script.js -v
+`watchify lib/fingers.js -d -o dist/script.js -v
+
+Compile swf with flex sdk via:
+`mxmlc -o storage.swf Storage.as`
+
