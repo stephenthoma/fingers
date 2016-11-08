@@ -7,7 +7,9 @@ var swfobject = require('swfobject');
 function Finger () {
   if (!(this instanceof Finger)) return new Finger();
 
+  this.has_flash = false;
   if (this.hasFlash()) {
+    this.has_flash = true;
     this.swf_ready = false;
     this.swf_container_id = "fingerstore";
     Finger[this.swf_container_id] = this;
@@ -21,14 +23,35 @@ function Finger () {
 
 Finger.prototype.getPrint = function() {
   var metrics = {};
+  metrics = this.gatherDeviceMetrics(metrics);
+  if (this.has_flash) {
+    if (self.getPrint === undefined) {
+      self = this;
+    }
+
+    if (!this.swf_ready) {
+      setTimeout(function() {
+        self.getPrint();
+      }, 300);
+    }
+    else {
+      metrics.lso = this.getFlashLSO();
+      console.log(murmur.hash128(JSON.stringify(metrics)).hex());
+    }
+  }
+  //else {
+    //return murmur.hash128(JSON.stringify(metrics)).hex();
+  //}
+};
+
+Finger.prototype.gatherDeviceMetrics = function(metrics) {
   metrics.language = this.getLanguages();
   metrics.platform = this.getPlatform();
   metrics.timezone = this.getTimezone();
   metrics.resolution = this.getScreenResolution();
   metrics.flash = this.getFlashVersion();
-
-  return murmur.hash128(JSON.stringify(metrics)).hex();
-};
+  return metrics;
+}
 
 Finger.prototype.getLanguages = function() {
   if (navigator.language) {
@@ -98,8 +121,14 @@ Finger.prototype._checkSwfReady = function() {
 };
 
 Finger.prototype.swfReady = function() {
-  this.setFlashLSO('vallll');
-  console.log(this.getFlashLSO());
+  var lso;
+  if (this.getFlashLSO()) {
+    lso = this.getFlashLSO();
+  }
+  else {
+    lso = murmur.hash128(Math.random().toString()).hex();
+    this.setFlashLSO(lso);
+  }
 };
 
 Finger.prototype.swfLoad = function() {
@@ -122,4 +151,4 @@ Finger.prototype.swfError = function(err, source) {
 window.Finger = Finger;
 
 var finger = new Finger();
-console.log(finger.getPrint());
+finger.getPrint();
