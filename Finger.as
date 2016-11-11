@@ -1,5 +1,6 @@
 // Largely pulled from https://github.com/nfriedly/Javascript-Flash-Cookies
 // and https://github.com/samyk/evercookie/blob/master/assets/evercookie.swf
+// and https://github.com/gabriel/font-detect-js/blob/master/flash/src/FontList.as
 package {
 
 import flash.display.Sprite;
