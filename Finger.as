@@ -5,11 +5,12 @@ package {
 import flash.display.Sprite;
 import flash.external.ExternalInterface;
 import flash.text.TextField;
+import flash.text.Font;
 import flash.system.Security;
 import flash.net.SharedObject;
 import flash.net.SharedObjectFlushStatus;
 
-public class Storage extends Sprite {
+public class Finger extends Sprite {
 
   // The JS callback functions should all be on a global variable at SwfStore.<namespace>.<function name>
   private var jsNamespace:String = "Finger.fingerstore.";
@@ -17,7 +18,7 @@ public class Storage extends Sprite {
   private var namespaceCheck:RegExp = /^[a-z0-9_\/]+$/i;
   private var logText:TextField;
 
-  public function Storage() {
+  public function Finger() {
     if (!ExternalInterface.available) {
       return;
     }
@@ -38,8 +39,9 @@ public class Storage extends Sprite {
     var dataStore:SharedObject = SharedObject.getLocal(this.loaderInfo.parameters.namespace);
 
     // Setup external interface
-    ExternalInterface.addCallback("set", setValue);
-    ExternalInterface.addCallback("get", getValue);
+    ExternalInterface.addCallback("setLSO", setValue);
+    ExternalInterface.addCallback("getLSO", getValue);
+    ExternalInterface.addCallback("getFonts", getSystemFonts);
 
     ExternalInterface.call(jsNamespace + "swfLoad");
   }
@@ -78,6 +80,10 @@ public class Storage extends Sprite {
     } catch (error:Error) {
       onError("Unable to write SharedObject to disk: " + error.message);
     }
+  }
+
+  private function getSystemFonts():Array {
+    return Font.enumerateFonts(true).sortOn("fontName", Array.CASEINSENSITIVE);
   }
 
   // Send logs to js

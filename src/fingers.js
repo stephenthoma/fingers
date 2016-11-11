@@ -15,6 +15,7 @@ function Finger () {
     Finger[this.swf_container_id] = this;
 
     this.embedSWFObject(this.swf_container_id);
+    // Error out if has flash but can't connect to SWF
     this._timeout = setTimeout(function() {
       Finger[this.swf_container_id].swfError(new Error("Failed to load SWF."), 'js');
     }, 5000);
@@ -36,12 +37,13 @@ Finger.prototype.getPrint = function() {
     }
     else {
       metrics.lso = this.getFlashLSO();
+      metrics.flash_fonts = this.getFlashFonts();
       console.log(murmur.hash128(JSON.stringify(metrics)).hex());
     }
   }
-  //else {
-    //return murmur.hash128(JSON.stringify(metrics)).hex();
-  //}
+  else {
+    console.log(murmur.hash128(JSON.stringify(metrics)).hex());
+  }
 };
 
 Finger.prototype.gatherDeviceMetrics = function(metrics) {
@@ -101,17 +103,22 @@ Finger.prototype.embedSWFObject = function(container_id) {
 
   var FlashVars = {namespace: container_id};
   var params = {allowScriptAccess: "always"}
-  swfobject.embedSWF("storage.swf", container_id, "1", "1", "9.0.0", false, FlashVars, params);
+  swfobject.embedSWF("finger.swf", container_id, "1", "1", "9.0.0", false, FlashVars, params);
 };
 
 Finger.prototype.setFlashLSO = function(value) {
   this._checkSwfReady();
-  window[this.swf_container_id].set('finger', value);
+  window[this.swf_container_id].setLSO('finger', value);
 };
 
 Finger.prototype.getFlashLSO = function() {
   this._checkSwfReady();
-  return window[this.swf_container_id].get('finger');
+  return window[this.swf_container_id].getLSO('finger');
+};
+
+Finger.prototype.getFlashFonts = function() {
+  this._checkSwfReady();
+  return window[this.swf_container_id].getFonts();
 };
 
 Finger.prototype._checkSwfReady = function() {
