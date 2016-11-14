@@ -1,5 +1,5 @@
 To browserify the javascript run browserify or watchify ie:
-`watchify lib/fingers.js -d -o dist/script.js -v`
+`watchify src/fingers.js -d -o dist/script.js -v`
 
 Either use the included SWF file, or compile from source with the Flex SDK via:
 `mxmlc -o finger.swf Finger.as`
