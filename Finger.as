@@ -10,6 +10,7 @@ import flash.text.Font;
 import flash.system.Security;
 import flash.net.SharedObject;
 import flash.net.SharedObjectFlushStatus;
+import flash.system.Capabilities;
 
 public class Finger extends Sprite {
 
@@ -43,6 +44,7 @@ public class Finger extends Sprite {
     ExternalInterface.addCallback("setLSO", setValue);
     ExternalInterface.addCallback("getLSO", getValue);
     ExternalInterface.addCallback("getFonts", getSystemFonts);
+    ExternalInterface.addCallback("getCapabilities", getCapabilities);
 
     ExternalInterface.call(jsNamespace + "swfLoad");
   }
@@ -85,6 +87,15 @@ public class Finger extends Sprite {
 
   private function getSystemFonts():Array {
     return Font.enumerateFonts(true).sortOn("fontName", Array.CASEINSENSITIVE);
+  }
+
+  private function getCapabilities():Array {
+    var cap:Array = new Array();
+    cap.push({os: Capabilities.os});
+    cap.push({resolution: [Capabilities.screenResolutionX, Capabilities.screenResolutionY]});
+    cap.push({dpi: Capabilities.screenDPI});
+    cap.push({language: Capabilities.language});
+    return cap;
   }
 
   // Send logs to js

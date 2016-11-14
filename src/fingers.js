@@ -36,6 +36,7 @@ Finger.prototype.getPrint = function() {
     if (this.swf_ready) {
       metrics.lso = this.getFlashLSO();
       metrics.flash_fonts = this.getFlashFonts();
+      metrics.flash_capabilities = this.getFlashCapabilities();
       console.log(metrics);
       console.log(murmur.hash128(JSON.stringify(metrics)).hex());
     }
@@ -120,6 +121,11 @@ Finger.prototype.getFlashLSO = function() {
 Finger.prototype.getFlashFonts = function() {
   this._checkSwfReady();
   return window[this.swf_container_id].getFonts();
+};
+
+Finger.prototype.getFlashCapabilities = function() {
+  this._checkSwfReady();
+  return window[this.swf_container_id].getCapabilities();
 };
 
 Finger.prototype._checkSwfReady = function() {
